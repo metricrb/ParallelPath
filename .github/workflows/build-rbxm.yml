@@ -23,10 +23,6 @@ jobs:
         with:
           auth: ${{ secrets.GITHUB_TOKEN }}
 
-      - name: Install dependencies
-        run: |
-          wally install
-
       - name: Create rbxm project
         run: |
           mkdir -p build-rbxm

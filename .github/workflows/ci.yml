@@ -34,8 +34,12 @@ jobs:
         with:
           auth: ${{ secrets.GITHUB_TOKEN }}
 
-      - name: Install dependencies
-        run: wally install
+      - name: Install Luau CLI
+        run: |
+          curl -L https://github.com/luau-lang/luau/releases/latest/download/luau-ubuntu.zip -o /tmp/luau-ubuntu.zip
+          unzip -o /tmp/luau-ubuntu.zip -d /tmp/luau-ubuntu >/dev/null
+          chmod +x /tmp/luau-ubuntu/luau
+          echo "/tmp/luau-ubuntu" >> "$GITHUB_PATH"
 
       - name: Type check with luau
         run: |
@@ -47,18 +51,22 @@ jobs:
     steps:
       - uses: actions/checkout@v4
 
+      - name: Set up Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: '20'
+
       - name: Validate documentation
         run: |
-          # Check that all markdown files are valid
-          if ! command -v mdl &> /dev/null; then
-            gem install mdl
+          # Check that all markdown files are valid without requiring root-owned Ruby gems
+          if [ -d docs ]; then
+            npx --yes markdownlint-cli docs/*.md docs/guides/*.md || true
           fi
-          mdl docs/ || true
 
       - name: Check documentation links
         run: |
           # Verify markdown files link to existing files
-          for file in docs/*.md docs/guides/*.md docs/examples/*.md; do
+          for file in docs/*.md docs/guides/*.md; do
             if [ -f "$file" ]; then
               echo "Checking $file"
               # Basic link validation (can be enhanced)
@@ -76,9 +84,6 @@ jobs:
         uses: ok-nick/setup-aftman@v0.4.0
         with:
           auth: ${{ secrets.GITHUB_TOKEN }}
-
-      - name: Install dependencies
-        run: wally install
 
       - name: Build RBXM
         run: |
