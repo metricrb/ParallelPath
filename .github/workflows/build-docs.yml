@@ -40,7 +40,7 @@ jobs:
           cp -r docs/* build/
           cp docs/index.md build/README.md
 
-      - name: Create index.html
+      - name: Create routing entrypoints
         run: |
           cat > build/index.html << 'EOF'
           <!DOCTYPE html>
@@ -74,24 +74,50 @@ jobs:
           </head>
           <body class="markdown-body">
               <nav style="margin-bottom: 30px; padding-bottom: 20px; border-bottom: 1px solid #d0d7de;">
-                  <a href="/" style="font-weight: bold; font-size: 18px; margin-right: 20px;">parallel-path</a>
-                  <a href="/getting-started.md">Getting Started</a> |
-                  <a href="/api-reference.md">API Reference</a> |
-                  <a href="/guides/">Guides</a> |
+                  <a id="home-link" href="#" style="font-weight: bold; font-size: 18px; margin-right: 20px;">parallel-path</a>
+                  <a id="getting-started-link" href="#">Getting Started</a> |
+                  <a id="api-reference-link" href="#">API Reference</a> |
+                  <a id="guides-link" href="#">Guides</a> |
                   <a href="https://github.com/metricrb/parallel-path">GitHub</a>
               </nav>
               <div id="content"></div>
               <script src="https://cdn.jsdelivr.net/npm/marked/marked.min.js"></script>
               <script>
+                  const currentPath = window.location.pathname.replace(/\/+$/, '');
+                  const siteBasePath = currentPath === '' || currentPath === '/'
+                      ? '/'
+                      : `/${currentPath.split('/').filter(Boolean)[0]}`;
+                  const resolveSiteHref = (relativePath) => {
+                      const cleaned = relativePath.replace(/^\/+/, '');
+                      return siteBasePath === '/' ? `/${cleaned}` : `${siteBasePath}/${cleaned}`;
+                  };
+                  const resolveRouteFile = (routePath) => {
+                      if (routePath === siteBasePath || routePath === `${siteBasePath}/`) {
+                          return resolveSiteHref('README.md');
+                      }
+                      if (routePath.endsWith('.md')) {
+                          return routePath;
+                      }
+                      return `${routePath}.md`;
+                  };
+
+                  document.getElementById('home-link').href = resolveSiteHref('README.md');
+                  document.getElementById('getting-started-link').href = resolveSiteHref('getting-started.md');
+                  document.getElementById('api-reference-link').href = resolveSiteHref('api-reference.md');
+                  document.getElementById('guides-link').href = resolveSiteHref('guides/vehicle-steering.md');
+
                   async function loadMarkdown() {
-                      const path = window.location.pathname;
-                      const file = path === '/' ? '/README.md' : path + (path.endsWith('.md') ? '' : '.md');
+                      const file = resolveRouteFile(currentPath);
+
                       try {
                           const response = await fetch(file);
+                          if (!response.ok) {
+                              throw new Error(`HTTP ${response.status}`);
+                          }
                           const markdown = await response.text();
                           document.getElementById('content').innerHTML = marked.parse(markdown);
                       } catch (e) {
-                          document.getElementById('content').innerHTML = '<h1>404 Not Found</h1><p><a href="/">Back to home</a></p>';
+                          document.getElementById('content').innerHTML = '<h1>404 Not Found</h1><p><a href="' + resolveSiteHref('README.md') + '">Back to home</a></p>';
                       }
                   }
                   loadMarkdown();
@@ -99,6 +125,7 @@ jobs:
           </body>
           </html>
           EOF
+          cp build/index.html build/404.html
 
       - name: Upload artifact
         uses: actions/upload-pages-artifact@v4
