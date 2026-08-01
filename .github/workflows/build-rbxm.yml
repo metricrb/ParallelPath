@@ -1,0 +1,118 @@
+name: Build RBXM Release
+
+on:
+  push:
+    tags:
+      - 'v*'
+    branches:
+      - main
+    paths:
+      - 'src/**'
+      - 'wally.toml'
+      - '.github/workflows/build-rbxm.yml'
+  workflow_dispatch:
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Setup Roblox toolchain
+        uses: ok-nick/setup-aftman@v0.4.0
+        with:
+          auth: ${{ secrets.GITHUB_TOKEN }}
+
+      - name: Install dependencies
+        run: |
+          wally install
+
+      - name: Create rbxm project
+        run: |
+          mkdir -p build-rbxm
+          cat > build-rbxm/default.project.json << 'EOF'
+          {
+            "name": "parallel-path",
+            "tree": {
+              "$className": "DataModel",
+              "ServerScriptService": {
+                "$className": "ServerScriptService",
+                "parallel-path": {
+                  "$path": "../src"
+                }
+              }
+            }
+          }
+          EOF
+
+      - name: Build with rojo
+        run: |
+          cd build-rbxm
+          rojo build -o ../parallel-path.rbxm
+
+      - name: Get version
+        id: version
+        run: |
+          VERSION=$(grep '^version' wally.toml | head -1 | sed 's/version = "\(.*\)"/\1/')
+          echo "version=$VERSION" >> $GITHUB_OUTPUT
+          echo "Version: $VERSION"
+
+      - name: Create release artifacts
+        run: |
+          mkdir -p dist
+          cp parallel-path.rbxm dist/
+          cd dist
+          sha256sum parallel-path.rbxm > parallel-path.rbxm.sha256
+          echo "parallel-path v${{ steps.version.outputs.version }}" > CHECKSUMS.txt
+          cat parallel-path.rbxm.sha256 >> CHECKSUMS.txt
+
+      - name: Upload artifacts
+        uses: actions/upload-artifact@v3
+        with:
+          name: parallel-path-rbxm
+          path: dist/
+
+      - name: Create GitHub Release
+        if: startsWith(github.ref, 'refs/tags/v')
+        uses: softprops/action-gh-release@v1
+        with:
+          files: |
+            dist/parallel-path.rbxm
+            dist/CHECKSUMS.txt
+          draft: false
+          prerelease: false
+          body: |
+            # parallel-path v${{ steps.version.outputs.version }}
+
+            Download `parallel-path.rbxm` to import the module into your Roblox game.
+
+            ## Installation
+
+            1. Download `parallel-path.rbxm` from the assets below
+            2. In Roblox Studio, right-click ReplicatedStorage → Insert Object → Model
+            3. Import the file as a model
+            4. Optionally rename the folder to `parallel-path` for easier access
+
+            ## Verification
+
+            Verify the integrity of the downloaded file:
+            ```bash
+            sha256sum -c CHECKSUMS.txt
+            ```
+
+            ## Documentation
+
+            See the [documentation](https://valysia.github.io/parallel-path/) for usage guides and examples.
+
+            ## Changelog
+
+            For detailed changes, see [CHANGELOG.md](https://github.com/valysia/parallel-path/blob/main/CHANGELOG.md)
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+
+      - name: Update release assets
+        if: github.event_name == 'push' && github.ref == 'refs/heads/main'
+        uses: actions/upload-artifact@v3
+        with:
+          name: parallel-path-latest
+          path: dist/parallel-path.rbxm

@@ -1,0 +1,7 @@
+[std]
+library = "roblox"
+
+[lints]
+shadowing = "allow"
+empty_if = "warn"
+multiple_statements = "allow"

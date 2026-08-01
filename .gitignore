@@ -1,0 +1,38 @@
+# Dependencies
+Packages/
+
+# Build artifacts
+build/
+build-rbxm/
+dist/
+*.rbxm
+*.rbxl
+
+# Node modules
+node_modules/
+package-lock.json
+yarn.lock
+
+# IDE
+.vscode/
+.idea/
+*.swp
+*.swo
+*~
+.DS_Store
+
+# OS
+Thumbs.db
+.DS_Store
+
+# Test coverage
+coverage/
+.nyc_output/
+
+# Temp files
+*.tmp
+*.bak
+.cache/
+
+# GitHub Pages
+_site/

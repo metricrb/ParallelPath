@@ -1,0 +1,10 @@
+[package]
+name = "metricrb/parallel-path"
+version = "0.1.0"
+license = "MIT"
+authors = ["M_etrics"]
+description = "Parallel Luau pathfinding for humanoids, vehicles, and custom rigs"
+realm = "server"
+registry = "https://github.com/UpliftGames/wally-index"
+
+[dependencies]

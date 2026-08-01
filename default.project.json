@@ -1,0 +1,15 @@
+{
+  "name": "parallel-path",
+  "tree": {
+    "$className": "DataModel",
+    "ReplicatedStorage": {
+      "$className": "ReplicatedStorage",
+      "parallel-path": {
+        "$path": "src"
+      }
+    },
+    "ServerStorage": {
+      "$className": "ServerStorage"
+    }
+  }
+}

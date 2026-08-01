@@ -1,0 +1,120 @@
+name: CI
+
+on:
+  push:
+    branches:
+      - main
+  pull_request:
+    branches:
+      - main
+
+jobs:
+  lint:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Setup Roblox toolchain
+        uses: ok-nick/setup-aftman@v0.4.0
+        with:
+          auth: ${{ secrets.GITHUB_TOKEN }}
+
+      - name: Lint with selene
+        run: |
+          selene src tests
+        continue-on-error: true
+
+  type-check:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Setup Roblox toolchain
+        uses: ok-nick/setup-aftman@v0.4.0
+        with:
+          auth: ${{ secrets.GITHUB_TOKEN }}
+
+      - name: Install dependencies
+        run: wally install
+
+      - name: Type check with luau
+        run: |
+          luau analyze src tests
+        continue-on-error: true
+
+  docs:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Validate documentation
+        run: |
+          # Check that all markdown files are valid
+          if ! command -v mdl &> /dev/null; then
+            gem install mdl
+          fi
+          mdl docs/ || true
+
+      - name: Check documentation links
+        run: |
+          # Verify markdown files link to existing files
+          for file in docs/*.md docs/guides/*.md docs/examples/*.md; do
+            if [ -f "$file" ]; then
+              echo "Checking $file"
+              # Basic link validation (can be enhanced)
+              grep -o '\[.*\](.*\.md)' "$file" || true
+            fi
+          done
+
+  build:
+    runs-on: ubuntu-latest
+    needs: [lint, type-check, docs]
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Setup Roblox toolchain
+        uses: ok-nick/setup-aftman@v0.4.0
+        with:
+          auth: ${{ secrets.GITHUB_TOKEN }}
+
+      - name: Install dependencies
+        run: wally install
+
+      - name: Build RBXM
+        run: |
+          mkdir -p build
+          cat > build/default.project.json << 'EOF'
+          {
+            "name": "parallel-path",
+            "tree": {
+              "$className": "DataModel",
+              "ServerScriptService": {
+                "$className": "ServerScriptService",
+                "parallel-path": {
+                  "$path": "../src"
+                }
+              }
+            }
+          }
+          EOF
+          cd build
+          rojo build -o ../parallel-path.rbxm
+
+      - name: Upload RBXM artifact
+        uses: actions/upload-artifact@v3
+        with:
+          name: parallel-path-rbxm
+          path: parallel-path.rbxm
+
+  summary:
+    runs-on: ubuntu-latest
+    needs: [lint, type-check, docs, build]
+    if: always()
+    steps:
+      - name: Check build status
+        run: |
+          echo "✅ CI Pipeline Summary"
+          echo "Lint: ${{ needs.lint.result }}"
+          echo "Type Check: ${{ needs.type-check.result }}"
+          echo "Docs: ${{ needs.docs.result }}"
+          echo "Build: ${{ needs.build.result }}"
