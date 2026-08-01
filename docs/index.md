@@ -21,7 +21,7 @@ Add to your `wally.toml`:
 
 ```toml
 [dependencies]
-ParallelPath = "valysia/parallel-path@0.1"
+ParallelPath = "metricsrb/parallel-path@0.1"
 ```
 
 Then run `wally install`.

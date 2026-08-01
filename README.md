@@ -2,9 +2,9 @@
 
 > Parallel Luau pathfinding for humanoids, vehicles, and custom rigs — no MoveToFinished stutter.
 
-[![CI](https://github.com/valysia/parallel-path/actions/workflows/ci.yml/badge.svg)](https://github.com/valysia/parallel-path/actions/workflows/ci.yml)
-[![Build Documentation](https://github.com/valysia/parallel-path/actions/workflows/build-docs.yml/badge.svg)](https://valysia.github.io/parallel-path/)
-[![Wally Package](https://img.shields.io/badge/wally-valysia%2Fparallel--path-blue)](https://wally.run/package/valysia/parallel-path)
+[![CI](https://github.com/metricsrb/parallel-path/actions/workflows/ci.yml/badge.svg)](https://github.com/metricsrb/parallel-path/actions/workflows/ci.yml)
+[![Build Documentation](https://github.com/metricsrb/parallel-path/actions/workflows/build-docs.yml/badge.svg)](https://metricsrb.github.io/parallel-path/)
+[![Wally Package](https://img.shields.io/badge/wally-metricsrb%2Fparallel--path-blue)](https://wally.run/package/metricsrb/parallel-path)
 
 ## Why parallel-path?
 
@@ -28,7 +28,7 @@ Add to your `wally.toml`:
 
 ```toml
 [dependencies]
-ParallelPath = "valysia/parallel-path@0.1"
+ParallelPath = "metricsrb/parallel-path@0.1"
 ```
 
 Run `wally install`.
@@ -61,7 +61,7 @@ agent.Failed:Connect(function(model, reason)
 end)
 ```
 
-See [Getting Started](https://valysia.github.io/parallel-path/getting-started.html) for more.
+See [Getting Started](https://metricsrb.github.io/parallel-path/getting-started.html) for more.
 
 ## Features
 
@@ -95,10 +95,10 @@ When pathfinding fails:
 
 ## Documentation
 
-- **[API Reference](https://valysia.github.io/parallel-path/api-reference.html)** — All methods, signals, and types
-- **[Getting Started](https://valysia.github.io/parallel-path/getting-started.html)** — Step-by-step walkthrough
-- **[Guides](https://valysia.github.io/parallel-path/guides/)** — Vehicle steering, parallel computation, failsafes, migration from SimplePath
-- **[Examples](https://valysia.github.io/parallel-path/examples/)** — Humanoid NPC, AI car, custom rig with BodyVelocity
+- **[API Reference](https://metricsrb.github.io/parallel-path/api-reference.html)** — All methods, signals, and types
+- **[Getting Started](https://metricsrb.github.io/parallel-path/getting-started.html)** — Step-by-step walkthrough
+- **[Guides](https://metricsrb.github.io/parallel-path/guides/)** — Vehicle steering, parallel computation, failsafes, migration from SimplePath
+- **[Examples](https://metricsrb.github.io/parallel-path/examples/)** — Humanoid NPC, AI car, custom rig with BodyVelocity
 
 ## Project structure
 
@@ -192,4 +192,4 @@ MIT — see [LICENSE](./LICENSE) for details.
 
 ---
 
-**Questions?** Check the [documentation](https://valysia.github.io/parallel-path/) or open an issue on GitHub.
+**Questions?** Check the [documentation](https://metricsrb.github.io/parallel-path/) or open an issue on GitHub.

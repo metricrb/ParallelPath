@@ -102,11 +102,11 @@ jobs:
 
             ## Documentation
 
-            See the [documentation](https://valysia.github.io/parallel-path/) for usage guides and examples.
+            See the [documentation](https://metricsrb.github.io/parallel-path/) for usage guides and examples.
 
             ## Changelog
 
-            For detailed changes, see [CHANGELOG.md](https://github.com/valysia/parallel-path/blob/main/CHANGELOG.md)
+            For detailed changes, see [CHANGELOG.md](https://github.com/metricsrb/parallel-path/blob/main/CHANGELOG.md)
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
 

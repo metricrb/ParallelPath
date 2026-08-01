@@ -214,6 +214,6 @@ Releases follow [Semantic Versioning](https://semver.org/):
 
 - Open a [GitHub Discussion](https://github.com/metricrb/parallel-path/discussions)
 - DM on Roblox DevForum
-- Check [documentation](https://valysia.github.io/parallel-path/)
+- Check [documentation](https://metricsrb.github.io/parallel-path/)
 
 Thank you for contributing! 🎉
