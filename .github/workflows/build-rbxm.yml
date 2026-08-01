@@ -63,7 +63,7 @@ jobs:
           cat parallel-path.rbxm.sha256 >> CHECKSUMS.txt
 
       - name: Upload artifacts
-        uses: actions/upload-artifact@v3
+        uses: actions/upload-artifact@v4
         with:
           name: parallel-path-rbxm
           path: dist/
@@ -108,7 +108,7 @@ jobs:
 
       - name: Update release assets
         if: github.event_name == 'push' && github.ref == 'refs/heads/main'
-        uses: actions/upload-artifact@v3
+        uses: actions/upload-artifact@v4
         with:
           name: parallel-path-latest
           path: dist/parallel-path.rbxm

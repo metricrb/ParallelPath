@@ -106,7 +106,7 @@ jobs:
           rojo build -o ../parallel-path.rbxm
 
       - name: Upload RBXM artifact
-        uses: actions/upload-artifact@v3
+        uses: actions/upload-artifact@v4
         with:
           name: parallel-path-rbxm
           path: parallel-path.rbxm
