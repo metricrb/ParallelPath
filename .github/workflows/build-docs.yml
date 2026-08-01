@@ -78,7 +78,7 @@ jobs:
                   <a href="/getting-started.md">Getting Started</a> |
                   <a href="/api-reference.md">API Reference</a> |
                   <a href="/guides/">Guides</a> |
-                  <a href="https://github.com/metricsrb/parallel-path">GitHub</a>
+                  <a href="https://github.com/metricrb/parallel-path">GitHub</a>
               </nav>
               <div id="content"></div>
               <script src="https://cdn.jsdelivr.net/npm/marked/marked.min.js"></script>

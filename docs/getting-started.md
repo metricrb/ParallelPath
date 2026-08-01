@@ -5,7 +5,7 @@
 1. Add to your `wally.toml`:
 ```toml
 [dependencies]
-ParallelPath = "metricsrb/parallel-path@0.1"
+ParallelPath = "metricrb/parallel-path@0.1"
 ```
 
 2. Run `wally install`

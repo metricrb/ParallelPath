@@ -119,5 +119,5 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 ## Support
 
 For issues, questions, or contributions, visit:
-- GitHub: https://github.com/metricsrb/parallel-path
-- Documentation: https://metricsrb.github.io/parallel-path/
+- GitHub: https://github.com/metricrb/parallel-path
+- Documentation: https://metricrb.github.io/parallel-path/
