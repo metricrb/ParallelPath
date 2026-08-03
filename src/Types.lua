@@ -9,9 +9,8 @@
 ]=]
 
 --[=[
-	@type SteeringMode
+	@type SteeringMode = "Humanoid" | "Vehicle" | "Custom"
 	@within Types
-	"Humanoid" | "Vehicle" | "Custom"
 
 	Determines how the Agent moves:
 	- "Humanoid": Uses Humanoid:MoveTo() directly

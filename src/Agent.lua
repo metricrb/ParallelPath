@@ -7,25 +7,6 @@
 
 	Uses Heartbeat distance-polling instead of MoveToFinished for stutter-free movement.
 	Supports automatic stuck detection, path recomputation, and failsafe strategies.
-
-	@example
-	```lua
-	local Agent = require(ReplicatedStorage.Packages.ParallelPath).Agent
-	local Scheduler = require(ReplicatedStorage.Packages.ParallelPath).Scheduler
-
-	Scheduler.init(4)
-
-	local npc = workspace.MyNPC
-	local agent = Agent.new(npc, {
-		steeringMode = "Humanoid",
-	})
-
-	agent:MoveTo(Vector3.new(0, 5, 50))
-
-	agent.Reached:Connect(function()
-		print("Reached target!")
-	end)
-	```
 ]=]
 
 local Types = require(script.Parent.Types)
@@ -137,7 +118,7 @@ function Agent.new(model: Model, config: AgentConfig): Agent
 	local humanoid = rootPart.Parent:FindFirstChildOfClass("Humanoid")
 	if humanoid then
 		self._destroyConnection = humanoid.Died:Connect(function()
-			self:Failed:Fire(self.Model, "AgentDestroyed")
+			self.Failed:Fire(self.Model, "AgentDestroyed")
 			self:Destroy()
 		end)
 	end
@@ -211,7 +192,7 @@ function Agent:MoveTo(target: Vector3 | BasePart): () -> ()
 					self._stuckTimer = 0
 					self._steering:moveTo(self._waypoints[2].Position)
 				else
-					self:Failed:Fire(self.Model, "NoPath")
+					self.Failed:Fire(self.Model, "NoPath")
 					self:_setStatus("Idle")
 				end
 			end)
@@ -236,18 +217,18 @@ function Agent:MoveTo(target: Vector3 | BasePart): () -> ()
 								self._stuckTimer = 0
 								self._steering:moveTo(self._waypoints[2].Position)
 							else
-								self:Failed:Fire(self.Model, "NoPath")
+								self.Failed:Fire(self.Model, "NoPath")
 								self:_setStatus("Idle")
 							end
 						end)
 						:catch(function()
 							if not cancelled and not self._cancelled then
-								self:Failed:Fire(self.Model, "MaxRetriesExceeded")
+								self.Failed:Fire(self.Model, "MaxRetriesExceeded")
 								self:_setStatus("Idle")
 							end
 						end)
 				else
-					self:Failed:Fire(self.Model, "MaxRetriesExceeded")
+					self.Failed:Fire(self.Model, "MaxRetriesExceeded")
 					self:_setStatus("Idle")
 				end
 			end)
@@ -283,7 +264,7 @@ function Agent:_onHeartbeat()
 
 	if self._currentWaypoint > #self._waypoints or #self._waypoints == 0 then
 		if #self._waypoints > 0 then
-			self:Reached:Fire(self.Model, self._waypoints[#self._waypoints])
+			self.Reached:Fire(self.Model, self._waypoints[#self._waypoints])
 		end
 		self:_setStatus("Idle")
 		self._steering:stop()
@@ -296,7 +277,7 @@ function Agent:_onHeartbeat()
 
 	if distToWaypoint < reachedRadius then
 		local prevWaypoint = self._currentWaypoint > 1 and self._waypoints[self._currentWaypoint - 1] or targetWaypoint
-		self:WaypointReached:Fire(self.Model, prevWaypoint, targetWaypoint)
+		self.WaypointReached:Fire(self.Model, prevWaypoint, targetWaypoint)
 
 		if targetWaypoint.Action == Enum.PathWaypointAction.Jump then
 			self._steering:jump()
@@ -306,7 +287,7 @@ function Agent:_onHeartbeat()
 
 		if self._currentWaypoint > #self._waypoints then
 			if #self._waypoints > 0 then
-				self:Reached:Fire(self.Model, self._waypoints[#self._waypoints])
+				self.Reached:Fire(self.Model, self._waypoints[#self._waypoints])
 			end
 			self:_setStatus("Idle")
 			self._steering:stop()
@@ -320,7 +301,7 @@ function Agent:_onHeartbeat()
 	end
 
 	if self:_checkStuck() then
-		self:Stuck:Fire(self.Model)
+		self.Stuck:Fire(self.Model)
 		self:_setStatus("Stuck")
 		self._steering:stop()
 
@@ -333,7 +314,7 @@ function Agent:_onHeartbeat()
 				end
 			end)
 		else
-			self:Failed:Fire(self.Model, "AgentStuck")
+			self.Failed:Fire(self.Model, "AgentStuck")
 			self:_setStatus("Idle")
 		end
 	end
@@ -362,7 +343,7 @@ function Agent:_onPathBlocked(blockedWaypoint: PathWaypoint)
 		return
 	end
 
-	self:Blocked:Fire(self.Model, blockedWaypoint)
+	self.Blocked:Fire(self.Model, blockedWaypoint)
 
 	if self._config.recomputeOnBlock ~= false then
 		self._retryCount = 0
