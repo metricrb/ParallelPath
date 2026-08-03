@@ -29,18 +29,21 @@ jobs:
     steps:
       - uses: actions/checkout@v4
 
-      - name: Setup Roblox toolchain
-        uses: ok-nick/setup-aftman@v0.4.0
+      - name: Install Rust
+        uses: dtolnay/rust-toolchain@stable
+
+      - name: Cache Rust build
+        uses: Swatinem/rust-cache@v2
         with:
-          auth: ${{ secrets.GITHUB_TOKEN }}
+          workspaces: /root/.cargo
 
       - name: Install Moonwave
         run: |
-          cargo install moonwave --locked
+          cargo install moonwave --locked --quiet
 
       - name: Build documentation
         run: |
-          moonwave
+          ~/.cargo/bin/moonwave
 
       - name: Upload artifact
         uses: actions/upload-pages-artifact@v4
