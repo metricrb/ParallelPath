@@ -3,7 +3,6 @@
 > Parallel Luau pathfinding for humanoids, vehicles, and custom rigs — no MoveToFinished stutter.
 
 [![CI](https://github.com/metricrb/parallel-path/actions/workflows/ci.yml/badge.svg)](https://github.com/metricrb/parallel-path/actions/workflows/ci.yml)
-[![Build Documentation](https://github.com/metricrb/parallel-path/actions/workflows/build-docs.yml/badge.svg)](https://metricrb.github.io/parallel-path/)
 [![Wally Package](https://img.shields.io/badge/wally-metricrb%2Fparallel--path-blue)](https://wally.run/package/metricrb/parallel-path)
 
 ## Why parallel-path?
