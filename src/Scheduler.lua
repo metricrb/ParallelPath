@@ -1,5 +1,36 @@
 --!strict
 
+--[=[
+	@class Scheduler
+
+	Manages an Actor pool for parallel path computation.
+
+	Spawns worker Actors that compute pathfinding requests in parallel using
+	Parallel Luau. Routes requests round-robin across workers.
+
+	@example
+	```lua
+	local Scheduler = require(ReplicatedStorage.Packages.ParallelPath).Scheduler
+
+	-- Initialize once at game startup
+	Scheduler.init(4)  -- 4 worker Actors
+
+	-- Later, compute a path
+	local request = {
+		start = Vector3.new(0, 5, 0),
+		goal = Vector3.new(50, 5, 50),
+	}
+
+	Scheduler.compute(request)
+		:andThen(function(waypoints)
+			print("Path computed with", #waypoints, "waypoints")
+		end)
+		:catch(function(error)
+			print("Pathfinding failed:", error)
+		end)
+	```
+]=]
+
 local Types = require(script.Parent.Types)
 local Promise = require(script.Parent.lib.Promise)
 

@@ -1,5 +1,23 @@
 --!strict
 
+--[=[
+	@class Types
+
+	Public type definitions for parallel-path.
+
+	Exports all types needed to use the pathfinding library with full type safety.
+]=]
+
+--[=[
+	@type SteeringMode
+	@within Types
+	"Humanoid" | "Vehicle" | "Custom"
+
+	Determines how the Agent moves:
+	- "Humanoid": Uses Humanoid:MoveTo() directly
+	- "Vehicle": Uses VehicleSeat steering with PID control
+	- "Custom": Calls user-supplied steering callback
+]=]
 export type SteeringMode = "Humanoid" | "Vehicle" | "Custom"
 
 export type FailReason = "NoPath" | "ComputationError" | "MaxRetriesExceeded" | "AgentStuck" | "AgentDestroyed"

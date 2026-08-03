@@ -36,3 +36,6 @@ coverage/
 
 # GitHub Pages
 _site/
+
+# Moonwave docs (generated)
+docs_moonwave/

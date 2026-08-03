@@ -1,0 +1,59 @@
+[project]
+name = "parallel-path"
+description = "Parallel Luau pathfinding for humanoids, vehicles, and custom rigs"
+authors = ["M_etrics"]
+
+[docs]
+source_dir = "src"
+output_dir = "docs_moonwave"
+readme = "docs/index.md"
+logo = "docs/logo.svg"
+
+[[docs.categories]]
+name = "Core"
+color = "00B4FF"
+docs = [
+    "src/Agent.lua",
+    "src/Scheduler.lua",
+]
+
+[[docs.categories]]
+name = "Utilities"
+color = "2ECC71"
+docs = [
+    "src/lib/Signal.lua",
+    "src/lib/Promise.lua",
+    "src/lib/GridBuilder.lua",
+]
+
+[[docs.categories]]
+name = "Steering"
+color = "F39C12"
+docs = [
+    "src/Steering/Humanoid.lua",
+    "src/Steering/Vehicle.lua",
+    "src/Steering/Custom.lua",
+]
+
+[[docs.categories]]
+name = "Types"
+color = "9B59B6"
+docs = [
+    "src/Types.lua",
+]
+
+[[docs.pages]]
+title = "Getting Started"
+path = "docs/getting-started.md"
+
+[[docs.pages]]
+title = "API Reference"
+path = "docs/api-reference.md"
+
+[[docs.pages]]
+title = "Guides"
+path = "docs/guides/"
+
+[[docs.pages]]
+title = "Examples"
+path = "examples/"

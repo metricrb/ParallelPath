@@ -1,5 +1,33 @@
 --!strict
 
+--[=[
+	@class Agent
+
+	Manages movement of a humanoid, vehicle, or custom rig along a path.
+
+	Uses Heartbeat distance-polling instead of MoveToFinished for stutter-free movement.
+	Supports automatic stuck detection, path recomputation, and failsafe strategies.
+
+	@example
+	```lua
+	local Agent = require(ReplicatedStorage.Packages.ParallelPath).Agent
+	local Scheduler = require(ReplicatedStorage.Packages.ParallelPath).Scheduler
+
+	Scheduler.init(4)
+
+	local npc = workspace.MyNPC
+	local agent = Agent.new(npc, {
+		steeringMode = "Humanoid",
+	})
+
+	agent:MoveTo(Vector3.new(0, 5, 50))
+
+	agent.Reached:Connect(function()
+		print("Reached target!")
+	end)
+	```
+]=]
+
 local Types = require(script.Parent.Types)
 local Signal = require(script.Parent.lib.Signal)
 local Promise = require(script.Parent.lib.Promise)

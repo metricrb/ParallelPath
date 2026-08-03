@@ -1,4 +1,4 @@
-name: Build Documentation
+name: Build Documentation with Moonwave
 
 on:
   push:
@@ -6,6 +6,9 @@ on:
       - main
     paths:
       - 'docs/**'
+      - 'examples/**'
+      - 'src/**'
+      - 'moonwave.toml'
       - '.github/workflows/build-docs.yml'
   pull_request:
     branches:
@@ -26,111 +29,23 @@ jobs:
     steps:
       - uses: actions/checkout@v4
 
-      - name: Set up Node.js
-        uses: actions/setup-node@v4
+      - name: Setup Roblox toolchain
+        uses: ok-nick/setup-aftman@v0.4.0
         with:
-          node-version: '18'
+          auth: ${{ secrets.GITHUB_TOKEN }}
 
-      - name: Install dependencies
-        run: npm install -g @mermaid-js/mermaid-cli markdown
-
-      - name: Build documentation site
+      - name: Install Moonwave
         run: |
-          mkdir -p build
-          cp -r docs/* build/
-          cp docs/index.md build/README.md
+          cargo install moonwave --locked
 
-      - name: Create routing entrypoints
+      - name: Build documentation
         run: |
-          cat > build/index.html << 'EOF'
-          <!DOCTYPE html>
-          <html lang="en">
-          <head>
-              <meta charset="UTF-8">
-              <meta name="viewport" content="width=device-width, initial-scale=1.0">
-              <title>parallel-path - Parallel Luau Pathfinding for Roblox</title>
-              <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/github-markdown-css@5.2.0/github-markdown.css">
-              <style>
-                  .markdown-body {
-                      max-width: 900px;
-                      margin: 0 auto;
-                      padding: 20px;
-                      font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, 'Helvetica Neue', Arial, sans-serif;
-                  }
-                  body {
-                      background-color: #fff;
-                  }
-                  @media (prefers-color-scheme: dark) {
-                      body {
-                          background-color: #0d1117;
-                      }
-                  }
-                  h1 { border-bottom: 3px solid #0969da; padding-bottom: 10px; }
-                  a { color: #0969da; text-decoration: none; }
-                  a:hover { text-decoration: underline; }
-                  code { background-color: #f6f8fa; padding: 2px 6px; border-radius: 3px; }
-                  pre { background-color: #f6f8fa; padding: 16px; border-radius: 6px; overflow-x: auto; }
-              </style>
-          </head>
-          <body class="markdown-body">
-              <nav style="margin-bottom: 30px; padding-bottom: 20px; border-bottom: 1px solid #d0d7de;">
-                  <a id="home-link" href="#" style="font-weight: bold; font-size: 18px; margin-right: 20px;">parallel-path</a>
-                  <a id="getting-started-link" href="#">Getting Started</a> |
-                  <a id="api-reference-link" href="#">API Reference</a> |
-                  <a id="guides-link" href="#">Guides</a> |
-                  <a href="https://github.com/metricrb/parallel-path">GitHub</a>
-              </nav>
-              <div id="content"></div>
-              <script src="https://cdn.jsdelivr.net/npm/marked/marked.min.js"></script>
-              <script>
-                  const currentPath = window.location.pathname.replace(/\/+$/, '');
-                  const siteBasePath = currentPath === '' || currentPath === '/'
-                      ? '/'
-                      : `/${currentPath.split('/').filter(Boolean)[0]}`;
-                  const resolveSiteHref = (relativePath) => {
-                      const cleaned = relativePath.replace(/^\/+/, '');
-                      return siteBasePath === '/' ? `/${cleaned}` : `${siteBasePath}/${cleaned}`;
-                  };
-                  const resolveRouteFile = (routePath) => {
-                      if (routePath === siteBasePath || routePath === `${siteBasePath}/`) {
-                          return resolveSiteHref('README.md');
-                      }
-                      if (routePath.endsWith('.md')) {
-                          return routePath;
-                      }
-                      return `${routePath}.md`;
-                  };
-
-                  document.getElementById('home-link').href = resolveSiteHref('README.md');
-                  document.getElementById('getting-started-link').href = resolveSiteHref('getting-started.md');
-                  document.getElementById('api-reference-link').href = resolveSiteHref('api-reference.md');
-                  document.getElementById('guides-link').href = resolveSiteHref('guides/vehicle-steering.md');
-
-                  async function loadMarkdown() {
-                      const file = resolveRouteFile(currentPath);
-
-                      try {
-                          const response = await fetch(file);
-                          if (!response.ok) {
-                              throw new Error(`HTTP ${response.status}`);
-                          }
-                          const markdown = await response.text();
-                          document.getElementById('content').innerHTML = marked.parse(markdown);
-                      } catch (e) {
-                          document.getElementById('content').innerHTML = '<h1>404 Not Found</h1><p><a href="' + resolveSiteHref('README.md') + '">Back to home</a></p>';
-                      }
-                  }
-                  loadMarkdown();
-              </script>
-          </body>
-          </html>
-          EOF
-          cp build/index.html build/404.html
+          moonwave
 
       - name: Upload artifact
         uses: actions/upload-pages-artifact@v4
         with:
-          path: 'build'
+          path: 'docs_moonwave'
 
   deploy:
     environment:
