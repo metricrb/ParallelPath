@@ -136,5 +136,7 @@ agent.Failed:Connect(fn)         -- (model, reason: FailReason)
 
 - [Getting Started](./getting-started.md) — Detailed walkthrough
 - [API Reference](./api-reference.md) — All methods and types
-- [Guides](./guides/) — Vehicle steering, parallel computation, failsafes, migration from SimplePath
-- [Examples](./examples/) — Humanoid NPC, AI car, custom rig with BodyVelocity
+- [Vehicle Steering](./guides/vehicle-steering.md) — PID-controlled cars and rigged vehicles
+- [Parallel Computation](./guides/parallel-computation.md) — How the Actor pool works
+- [Failsafe Hierarchy](./guides/failsafe-hierarchy.md) — Recovery strategies
+- [Migrating from SimplePath](./guides/migrating.md) — API mapping

@@ -57,3 +57,7 @@ path = "docs/guides/"
 [[docs.pages]]
 title = "Examples"
 path = "examples/"
+
+[[docs.pages]]
+title = "License"
+path = "docs/license.md"
