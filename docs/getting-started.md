@@ -173,4 +173,4 @@ This disconnects all signals and Heartbeat connections.
 - **[Vehicle steering](./guides/vehicle-steering.md)** — PID-controlled cars
 - **[Parallel computation](./guides/parallel-computation.md)** — How the Actor pool works
 - **[Failsafe hierarchy](./guides/failsafe-hierarchy.md)** — Recovery strategies
-- **[Migrating from SimplePath](./guides/migrating-from-simplepath.md)** — API mapping
+- **[Migrating from SimplePath](./guides/migrating.md)** — API mapping

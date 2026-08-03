@@ -6,7 +6,7 @@ authors = ["M_etrics"]
 [docs]
 source_dir = "src"
 output_dir = "docs_moonwave"
-readme = "docs/index.md"
+readme = "docs/intro.md"
 logo = "docs/logo.svg"
 
 [[docs.categories]]
