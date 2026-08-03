@@ -50,14 +50,3 @@ path = "docs/getting-started.md"
 title = "API Reference"
 path = "docs/api-reference.md"
 
-[[docs.pages]]
-title = "Guides"
-path = "docs/guides/"
-
-[[docs.pages]]
-title = "Examples"
-path = "examples/"
-
-[[docs.pages]]
-title = "License"
-path = "docs/license.md"
